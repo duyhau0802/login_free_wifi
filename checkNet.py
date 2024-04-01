@@ -49,17 +49,18 @@ def auto_wireless_login():
 
         connect_button = driver.find_element(By.ID, "connectToInternet")
         connect_button.click()
-        time.sleep(1)
+        time.sleep(2)
 
-        # Check nếu đã có icon success chưa
-        try:
-            # Tìm phần tử theo class name
-            element = driver.find_element(By.ID, "wa_loading")
-            print("Yes, it is WiMesh Ad")  # In ra "Yes" nếu phần tử tồn tại
-        except NoSuchElementException:
-            print("No, it is Yamaha Ad")  # In ra "No" nếu phần tử không tồn tại
-            connect_button = driver.find_element(By.ID, "connectToInternet")
-            connect_button.click()
+        # # Check nếu đã có icon success chưa
+        # try:
+        #     # Tìm phần tử theo class name
+        #     element = driver.find_element(By.ID, "wa_loading")
+        #     print("Yes, it is WiMesh Ad")  # In ra "Yes" nếu phần tử tồn tại
+        # except NoSuchElementException:
+        #     print("No, it is Yamaha Ad")  # In ra "No" nếu phần tử không tồn tại
+        #     connect_button = driver.find_element(By.ID, "connectToInternet")
+        #     connect_button.click()
+        #     time.sleep(1)
 
     except Exception as e:
         print("Đã xảy ra lỗi:", e)
