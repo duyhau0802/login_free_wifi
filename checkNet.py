@@ -49,18 +49,7 @@ def auto_wireless_login():
 
         connect_button = driver.find_element(By.ID, "connectToInternet")
         connect_button.click()
-        time.sleep(2)
-
-        # # Check nếu đã có icon success chưa
-        # try:
-        #     # Tìm phần tử theo class name
-        #     element = driver.find_element(By.ID, "wa_loading")
-        #     print("Yes, it is WiMesh Ad")  # In ra "Yes" nếu phần tử tồn tại
-        # except NoSuchElementException:
-        #     print("No, it is Yamaha Ad")  # In ra "No" nếu phần tử không tồn tại
-        #     connect_button = driver.find_element(By.ID, "connectToInternet")
-        #     connect_button.click()
-        #     time.sleep(1)
+        # time.sleep(2)
 
     except Exception as e:
         print("Đã xảy ra lỗi:", e)
@@ -74,8 +63,7 @@ def check_internet_connection():
         result = subprocess.run(['ping', '172.172.0.1', '-n', '1'], capture_output=True, text=True, timeout=5)
         if "Destination host unreachable" in result.stdout or "Destination net unreachable" or "Request timed out" in result.stdout:
             print("Destination net unreachable. Running the executable program.")
-            # Chạy chương trình .exe 
-            # subprocess.run(["./dist/freeWifi.exe"], stderr=subprocess.PIPE)
+            # Chạy chương trình
             auto_wireless_login()
             return False
         else:
