@@ -9,8 +9,8 @@ from selenium.webdriver.edge.service import Service
 import datetime
 
 edge_options = Options()
-profile_path = r"C:\Users\WIN-PRO\AppData\Local\Microsoft\Edge\User Data\Profile 1"
-edge_options.add_argument(f"user-data-dir={profile_path}")
+# profile_path = r"C:\Users\WIN-PRO\AppData\Local\Microsoft\Edge\User Data\Profile 1"
+# edge_options.add_argument(f"user-data-dir={profile_path}")
 edge_options.add_argument("headless")
 edge_options.add_argument('--disable-gpu')  # Vô hiệu hóa GPU (khuyến nghị khi chạy headless)
 edge_options.add_argument('--log-level=3')  # Giảm số lượng thông báo log (Chỉ hoạt động với Chrome, nhưng thử nếu bạn sử dụng bản dựa trên Chromium)
@@ -18,34 +18,40 @@ edge_options.add_argument('--silent')  # Cố gắng chạy trình điều khi�
 edge_options.add_experimental_option('excludeSwitches', ['enable-logging'])  # Loại bỏ thông báo "DevTools listening on..."
 
 # ngăn log error ra cmd
-service = Service(log_path=os.devnull)
+# edge_service = Service(log_path=os.devnull)
+
+edge_service = Service("./msedgedriver.exe")
 
 def printTime():
     # Lấy thời gian hiện tại
     now = datetime.datetime.now()
     # Định dạng thời gian theo dạng giờ:phút
-    print(now.strftime("%H:%M"))
+    print("Time current check: ", now.strftime("%H:%M:%S"))
 
 def auto_wireless_login():
     driver = None
     try:
         # Khởi tạo WebDriver với các tùy chọn đã cấu hình
-        driver = webdriver.Edge(options=edge_options, service=service)
+        driver = webdriver.Edge(options=edge_options, service=edge_service)
         
-        driver.get("http://acm.awingconnect.vn/login?serial=4C:5E:0C:05:00:40&client_mac=34:F3:9A:6C:44:B8&client_ip=172.172.27.242&userurl=http://www.msftconnecttest.com/redirect&login_url=http://free.wi-mesh.vn/login")
+        driver.get("http://v1.awingconnect.vn/login?serial=4C:5E:0C:05:00:40&client_mac=34:F3:9A:6C:44:B8&client_ip=172.172.27.57&userurl=http://www.msftconnecttest.com/redirect&login_url=http://free.wi-mesh.vn/login")
         
-        # time.sleep(1)  # Đợi trang web load 1s
+        time.sleep(3)
 
-        driver.execute_script("nextView()")
+        if driver.execute_script("return typeof awingStateMachineContextActions !== 'undefined';"):
+            driver.execute_script("awingStateMachineContextActions.nextView()")
+        else:
+            print("awingStateMachineContextActions is not defined on this page.")
+            return False
 
         # Tìm kiếm các thẻ video
         video_tags = driver.find_elements(By.TAG_NAME, "video")
         
         if video_tags:
-            print("Tìm thấy thẻ video")
             driver.execute_script("var videos = document.getElementsByTagName('video'); for (var i = 0; i < videos.length; i++) {videos[i].muted = true;}")
-            driver.execute_script("nextView()")
+            driver.execute_script("awingStateMachineContextActions.nextView()")
             time.sleep(1)
+            # printTime()
             return True
         else:
             print("Không tìm thấy thẻ video")
@@ -60,12 +66,14 @@ def auto_wireless_login():
 
 # Run indefinitely
 while True:
+    # printTime()
     # Check internet connection
     if auto_wireless_login():
         print("Internet connected!")
-        printTime()
     else :
         print("Error")
-        printTime()
     # Wait for 15 minutes before checking again
-    time.sleep(15 * 60 - 2)  # 15 minutes - 3 second delay
+    # new_time = datetime.datetime.now() + datetime.timedelta(minutes=15, seconds=-5)
+    # print("Time next check: ", new_time.strftime("%H:%M:%S"))
+    time.sleep(15 * 60 - 6 )  # 15 minutes - 7 second delay
+
