@@ -60,9 +60,9 @@ def auto_wireless_login():
     except Exception as e:
         print("Đã xảy ra lỗi:", e)
         return False
-    # finally:
-    #     if driver:
-    #         driver.quit()
+    finally:
+        if driver:
+            driver.quit()
 
 # Run indefinitely
 while True:
@@ -75,5 +75,5 @@ while True:
     # Wait for 15 minutes before checking again
     # new_time = datetime.datetime.now() + datetime.timedelta(minutes=15, seconds=-5)
     # print("Time next check: ", new_time.strftime("%H:%M:%S"))
-    time.sleep(15 * 60 - 6 )  # 15 minutes - 7 second delay
+    time.sleep(15 * 60 - 5 )  # 15 minutes - 7 second delay
 
